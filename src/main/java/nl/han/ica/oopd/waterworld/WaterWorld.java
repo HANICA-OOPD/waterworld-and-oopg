@@ -141,7 +141,7 @@ public class WaterWorld extends GameEngine {
      * waarde
      */
     private void initializePersistence() {
-        persistence = new FilePersistence("resources/bubblesPopped.txt");
+        persistence = new FilePersistence("src/main/resources/bubblesPopped.txt");
         if (persistence.fileExists()) {
             bubblesPopped = Integer.parseInt(persistence.loadDataString());
             refreshDasboardText();

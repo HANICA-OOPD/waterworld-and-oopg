@@ -27,8 +27,7 @@ public class TileType <T extends Tile> {
      * @param classType The type of class this factory will be creating instances of.
      * @param sprite The image which will be drawn whenever the draw method of the created tiles is called.
      */
-	public TileType(Class<T> classType, Sprite sprite)
-	{
+	public TileType(Class<T> classType, Sprite sprite) {
 		this.classType = classType;
 		this.sprite = sprite;
 	}
@@ -38,8 +37,7 @@ public class TileType <T extends Tile> {
      * @param tileSize the size of the tile which wil be used to resize the image of the tile.
      * @return tile
      */
-	public Tile createNewInstanceOfTile(int tileSize)
-	{
+	public Tile createNewInstanceOfTile(int tileSize) {
         Tile tile;
         try {
             tile = classType.getDeclaredConstructor(Sprite.class).newInstance(sprite);

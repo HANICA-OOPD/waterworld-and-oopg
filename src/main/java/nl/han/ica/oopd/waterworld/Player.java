@@ -28,7 +28,7 @@ public class Player extends AnimatedSpriteObject implements ICollidableWithTiles
      * @param world Referentie naar de wereld
      */
     public Player(WaterWorld world) {
-        super(new Sprite("src/resources/player.png"), 2);
+        super(new Sprite("src/main/resources/player.png"), 2);
         this.world = world;
         setCurrentFrameIndex(1);
         setFriction(0.05f);

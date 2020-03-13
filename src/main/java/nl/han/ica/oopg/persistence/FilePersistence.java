@@ -18,22 +18,23 @@ import java.io.OutputStreamWriter;
  * You can use the game persistance for example to save variables or,
  * highscores. You are allowed to use multiple game persistances, each
  * additional persistance saves an additional file on your system if the
- * filename name is different.
+ * filepath name is different.
  */
 public class FilePersistence implements IPersistence {
 
     private Logger logger = LogFactory.getLogger();
 
-    private String filename;
+    private String filepath;
 
     /**
-     * The constructor allows you to specify the filename the internal storage
+     * The constructor allows you to specify the filepath the internal storage
      * will use.
      *
-     * @param filename The name of the file that will be used for this persistance
+     * @param filepath The full path including file for this persistance.
+     * For example "src/main/resources/logfile.txt"
      */
-    public FilePersistence(String filename) {
-        this.filename = filename;
+    public FilePersistence(String filepath) {
+        this.filepath = filepath;
     }
 
     /**
@@ -49,7 +50,7 @@ public class FilePersistence implements IPersistence {
         FileOutputStream fos;
         File file;
         try {
-            file = new File("src/", filename);
+            file = new File("src/", filepath);
             fos = new FileOutputStream(file);
             if (!file.exists()) {
                 file.createNewFile();
@@ -99,7 +100,7 @@ public class FilePersistence implements IPersistence {
     public String loadDataString() {
 
         String content = "";
-        File file = new File("src/", filename);
+        File file = new File(filepath);
 
         if (file.exists()) {
             int bufferSize = (int) file.length();
@@ -130,10 +131,10 @@ public class FilePersistence implements IPersistence {
     }
 
     /**
-     * This function deletes the earlier specified file.
+     * This function deletes the earlier specified file at the filepath.
      */
     public void deleteData() {
-        File file = new File("src/", filename);
+        File file = new File(filepath);
         file.delete();
     }
 
@@ -143,6 +144,6 @@ public class FilePersistence implements IPersistence {
      * @return Boolean with the result.
      */
     public boolean fileExists() {
-        return new File("src/", filename).exists();
+        return new File(filepath).exists();
     }
 }
