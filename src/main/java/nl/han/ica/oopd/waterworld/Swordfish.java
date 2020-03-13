@@ -19,7 +19,7 @@ public class Swordfish extends SpriteObject {
      * @param world Referentie naar de wereld
      */
     public Swordfish(GameEngine world) {
-        this(new Sprite("src/resources/swordfish.png"));
+        this(new Sprite("src/main/resources/swordfish.png"));
         this.world = world;
     }
 

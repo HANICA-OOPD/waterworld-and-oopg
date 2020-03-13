@@ -70,7 +70,7 @@ public class WaterWorld extends GameEngine {
      */
     private void createViewWithoutViewport(int screenWidth, int screenHeight) {
         View view = new View(screenWidth, screenHeight);
-        view.setBackground(loadImage("src/resources/background.jpg"));
+        view.setBackground(loadImage("src/main/resources/background.jpg"));
 
         setView(view);
         size(screenWidth, screenHeight);
@@ -91,16 +91,16 @@ public class WaterWorld extends GameEngine {
         View view = new View(viewPort, worldWidth, worldHeight);
         setView(view);
         size(screenWidth, screenHeight);
-        view.setBackground(loadImage("src/resources/background.jpg"));
+        view.setBackground(loadImage("src/main/resources/background.jpg"));
     }
 
     /**
      * Initialiseert geluid
      */
     private void initializeSound() {
-        backgroundSound = new Sound(this, "src/resources/waterworld.mp3");
+        backgroundSound = new Sound(this, "src/main/resources/waterworld.mp3");
         backgroundSound.loop(-1);
-        bubblePopSound = new Sound(this, "src/resources/pop.mp3");
+        bubblePopSound = new Sound(this, "src/main/resources/pop.mp3");
     }
 
 
@@ -154,7 +154,7 @@ public class WaterWorld extends GameEngine {
      */
     private void initializeTileMap() {
         /* TILES */
-        Sprite boardsSprite = new Sprite("src/resources/boards-tile.jpg");
+        Sprite boardsSprite = new Sprite("src/main/resources/boards-tile.jpg");
         TileType<BoardsTile> boardTileType = new TileType<>(BoardsTile.class, boardsSprite);
 
         TileType[] tileTypes = {boardTileType};
