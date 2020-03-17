@@ -30,6 +30,10 @@ public class GameThread implements Runnable {
      */
     private boolean isGamePaused;
 
+    public boolean isGamePaused() {
+    	return isGamePaused;
+    }
+    
     /**
      * Holds how many times the game should update.
      */

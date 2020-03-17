@@ -64,6 +64,10 @@ public abstract class GameEngine extends PApplet {
      */
     private FPSCounter fpsCounter;
 
+    /** The (default) key for the user pause the game. */
+	private char pauseKey = 'p';
+	private char pauseKeyUpper = 'P';
+
     private static GameEngine engine;
 
     /**
@@ -105,6 +109,16 @@ public abstract class GameEngine extends PApplet {
      */
     public View getView() {
         return view;
+    }
+
+    public int getPauseKey() {
+		return pauseKey;
+	}
+    
+    public void setPauseKey(char key) {
+    	pauseKey = key;
+    	String pauseKeyAsString = "" + pauseKey;
+    	pauseKeyUpper = Character.isUpperCase(pauseKey) ? pauseKeyAsString.toLowerCase().charAt(0) : pauseKeyAsString.toUpperCase().charAt(0);
     }
 
     /**
@@ -345,15 +359,23 @@ public abstract class GameEngine extends PApplet {
     }
 
     /**
-     * Fires a keyPressed event to every GameObject inside the GameEngine.
+     * Fires a keyPressed event to every GameObject that handles keys (e.g. implements IKeyInput)
+     * inside the GameEngine.
      * <p>
-     * (non-Javadoc) This event is fired by Processing when registers key input.
-     *
+     * (non-Javadoc) This event is fired by Processing when it registers key input.
+     * Exception is the pause key which is handled here centrally. And when the game is paused input not forwarded (but ignored).
      * @see processing.core.PApplet#keyPressed()
      */
     public void keyPressed() {
-        for (int i = 0; i < gameObjects.size(); i++) {
+    	if (key==pauseKey ||  key==pauseKeyUpper) {
+    		togglePause();
+    	}
+    	if (doIgnoreInput()) {
+    		return;
+        }
 
+    	// Andere input krijgt elk GameObject die een IKeyInput is de gelegenheid deze af te handelen.
+        for (int i = 0; i < gameObjects.size(); i++) {
             if (gameObjects.get(i) instanceof IKeyInput) {
                 ((IKeyInput) gameObjects.get(i)).keyPressed(keyCode, key);
             }
@@ -368,8 +390,10 @@ public abstract class GameEngine extends PApplet {
      * @see processing.core.PApplet#keyReleased()
      */
     public void keyReleased() {
+    	if (doIgnoreInput()) {
+    		return;
+    	}
         for (int i = 0; i < gameObjects.size(); i++) {
-
             if (gameObjects.get(i) instanceof IKeyInput) {
                 ((IKeyInput) gameObjects.get(i)).keyReleased(keyCode, key);
             }
@@ -385,6 +409,9 @@ public abstract class GameEngine extends PApplet {
      */
     public void mousePressed() {
 
+    	if (doIgnoreInput()) {
+    		return;
+    	}
         PVector location = calculateRelativeMouseLocation(mouseX, mouseY);
 
         for (int i = 0; i < gameObjects.size(); i++) {
@@ -404,6 +431,9 @@ public abstract class GameEngine extends PApplet {
      */
     public void mouseReleased() {
 
+    	if (doIgnoreInput()) {
+    		return;
+    	}
         PVector location = calculateRelativeMouseLocation(mouseX, mouseY);
 
         for (int i = 0; i < gameObjects.size(); i++) {
@@ -423,6 +453,9 @@ public abstract class GameEngine extends PApplet {
      */
     public void mouseClicked() {
 
+    	if (doIgnoreInput()) {
+    		return;
+    	}
         PVector location = calculateRelativeMouseLocation(mouseX, mouseY);
 
         for (int i = 0; i < gameObjects.size(); i++) {
@@ -442,6 +475,9 @@ public abstract class GameEngine extends PApplet {
      */
     public void mouseMoved() {
 
+    	if (doIgnoreInput()) {
+    		return;
+    	}
         PVector location = calculateRelativeMouseLocation(mouseX, mouseY);
 
         for (int i = 0; i < gameObjects.size(); i++) {
@@ -461,6 +497,9 @@ public abstract class GameEngine extends PApplet {
      */
     public void mouseDragged() {
 
+    	if (doIgnoreInput()) {
+    		return;
+    	}
         PVector location = calculateRelativeMouseLocation(mouseX, mouseY);
 
         for (int i = 0; i < gameObjects.size(); i++) {
@@ -480,6 +519,9 @@ public abstract class GameEngine extends PApplet {
      */
     public void mouseWheel(MouseEvent event) {
 
+    	if (doIgnoreInput()) {
+    		return;
+    	}
         for (int i = 0; i < gameObjects.size(); i++) {
 
             if (gameObjects.get(i) instanceof IMouseInput) {
@@ -488,7 +530,16 @@ public abstract class GameEngine extends PApplet {
         }
     }
 
-    /**
+    /** 
+     * Ignore input if - and only if - the game is paused.
+     * This method should be checked and acted upon by all input handling methods of this class.
+     * @return
+     */
+    private boolean doIgnoreInput() {
+		return isGamePaused();
+	}
+
+	/**
      * Sets the amount of updates per second for the GameThread.
      *
      * @param updatesPerSecond The number of udates per second
@@ -527,19 +578,6 @@ public abstract class GameEngine extends PApplet {
         return (int) gameThread.getGameSpeed();
     }
 
-    /**
-     * Pauses the Game.
-     */
-    public void pauseGame() {
-        gameThread.pauseGame();
-    }
-
-    /**
-     * Resumes the Game.
-     */
-    public void resumeGame() {
-        gameThread.resumeGame();
-    }
 
     /**
      * Returns if the game thread is paused or not
@@ -558,6 +596,21 @@ public abstract class GameEngine extends PApplet {
     public void setTileMap(TileMap tileMap) {
         this.tileMap = tileMap;
     }
+
+    /**
+     * Pause the game if not paused, or resume if it is paused.
+     */
+    public void togglePause() {
+    	if (isGamePaused()) {
+            gameThread.resumeGame();
+    	} else {
+    		gameThread.pauseGame();
+    	}
+    }
+
+    private boolean isGamePaused() {
+		return gameThread.isGamePaused();
+	}
 
     /**
      * Gets the TileMap which is drawn by the view.
