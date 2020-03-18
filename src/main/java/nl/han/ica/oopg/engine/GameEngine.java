@@ -373,8 +373,6 @@ public abstract class GameEngine extends PApplet {
     	if (doIgnoreInput()) {
     		return;
         }
-
-    	// Andere input krijgt elk GameObject die een IKeyInput is de gelegenheid deze af te handelen.
         for (int i = 0; i < gameObjects.size(); i++) {
             if (gameObjects.get(i) instanceof IKeyInput) {
                 ((IKeyInput) gameObjects.get(i)).keyPressed(keyCode, key);
@@ -701,7 +699,6 @@ public abstract class GameEngine extends PApplet {
         private static double lerp(float x1, float x2, double t) {
             return x1 + (x2 - x1) * t;
         }
-
 
         private static CollisionSide getCollidedTileSide(Rectangle gameObject, Rectangle tile) {
             int centerTileX = (int) tile.getX() + ((int) tile.getWidth() / 2);

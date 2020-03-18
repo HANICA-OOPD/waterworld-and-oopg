@@ -33,7 +33,7 @@ public class BubbleSpawner implements IAlarmListener {
         startAlarm();
     }
 
-    private void startAlarm() {
+    public void startAlarm() {
         Alarm alarm = new Alarm("New bubble", 1 / bubblesPerSecond);
         alarm.addTarget(this);
         alarm.start();

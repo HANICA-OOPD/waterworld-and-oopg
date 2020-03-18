@@ -21,9 +21,6 @@ import processing.core.PApplet;
  */
 public class WaterWorld extends GameEngine {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 4132434213105888256L;
 	private Sound backgroundSound;
     private Sound bubblePopSound;
@@ -48,6 +45,7 @@ public class WaterWorld extends GameEngine {
     @Override
     public void setupGame() {
 
+    	this.setPauseKey('l');
         int worldWidth = 1204;
         int worldHeight = 903;
 
@@ -119,6 +117,7 @@ public class WaterWorld extends GameEngine {
      */
     public void createBubbleSpawner() {
         bubbleSpawner = new BubbleSpawner(this, bubblePopSound, 2);
+        bubbleSpawner.startAlarm();
     }
 
     /**
